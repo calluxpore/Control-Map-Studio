@@ -2,6 +2,31 @@
 
 Upload a 3D model or an image — one at a time — and generate depth, Canny edge, or pose-skeleton control maps. Runs entirely in the browser: no backend, no build step, no server-side storage. Everything (model/image loading, edge detection, depth estimation, pose detection) happens client-side, so it works as a plain static site — including on GitHub Pages.
 
+## Tech stack
+
+**Core** — plain HTML5, CSS3, and vanilla JavaScript (ES modules). No framework, no bundler, no build step, no npm dependencies of any kind — every library is loaded from a CDN at runtime.
+
+**3D rendering** — [three.js](https://threejs.org/) `0.160.0` (via jsdelivr CDN), specifically:
+- `WebGLRenderer`, `PerspectiveCamera`, `WebGLRenderTarget` — the core render/capture pipeline
+- `OrbitControls` — rotate/pan/zoom
+- `GLTFLoader`, `OBJLoader` + `MTLLoader`, `FBXLoader`, `STLLoader` — model format support
+- `LoadingManager` with a custom `setURLModifier` — resolves multi-file models (textures, `.bin` buffers) against in-memory blob URLs instead of a server
+- `MeshDepthMaterial` (`BasicDepthPacking`) — the geometric depth-map render
+- `RoomEnvironment` + `PMREMGenerator` — a neutral studio environment map so PBR/metallic materials get reflections instead of rendering solid black
+- `Raycaster` — used to find the nearest actually-visible surface for correct depth-map near-plane placement, especially when the camera is zoomed in close or inside the model
+
+**Machine learning models** (all client-side inference, loaded lazily from a CDN on first use and cached by the browser after that — nothing runs server-side, there is no server):
+- **[Depth Anything](https://huggingface.co/Xenova/depth-anything-small-hf)** (`Xenova/depth-anything-small-hf`) via [🤗 Transformers.js](https://github.com/xenova/transformers.js) `2.17.2` — monocular depth estimation for uploaded images
+- **[MoveNet](https://www.tensorflow.org/hub/tutorials/movenet)** (SINGLEPOSE_LIGHTNING) via [TensorFlow.js](https://www.tensorflow.org/js) `4.20.0` + `@tensorflow-models/pose-detection` `2.1.3` — 2D human pose keypoint detection for uploaded images
+
+**Hand-implemented algorithms** (no library — original code in this repo):
+- **Canny edge detector** (`canny.js`) — grayscale conversion → Gaussian blur → Sobel gradients → non-maximum suppression → hysteresis thresholding → dilation for line thickness. Used for both 3D-model and image edge maps.
+- **Rig/skeleton mapper** (`pose.js`) — maps arbitrary bone names (Mixamo, VRM / Ready Player Me / Unity Humanoid conventions) to canonical joints for 3D models, and renders both the 3D and image pose results in the standard OpenPose COCO-18 topology (a synthesized neck hub, matching what SD1.5/SDXL OpenPose ControlNet models expect).
+
+**Browser APIs relied on** — `File`/`Blob`/`URL.createObjectURL`, the HTML5 Drag-and-Drop API (`DataTransferItem`/`FileSystemEntry`, for whole-folder model uploads), `Canvas2D`, `ResizeObserver`, and `localStorage` (theme preference only — no other state persists).
+
+**Hosting** — static files only; no server, no database, no environment variables, no secrets. Works from GitHub Pages, any static host, or a local static file server.
+
 ## Deploying to GitHub Pages
 
 This repo's root **is** the site — no `/docs` folder, no build step.
