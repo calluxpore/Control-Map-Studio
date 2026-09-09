@@ -1,0 +1,5 @@
+node_modules/
+server/
+local-files-not-for-github/
+.DS_Store
+Thumbs.db

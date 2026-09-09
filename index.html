@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Control Map Studio</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header>
+    <div class="header-row">
+      <div>
+        <h1>Control Map Studio</h1>
+        <p class="subtitle">Upload a 3D model or an image, and generate depth, edge, or pose control maps.</p>
+      </div>
+      <button id="themeToggle" type="button" aria-pressed="false" aria-label="Switch to dark mode">
+        <span id="themeToggleIcon" aria-hidden="true">&#9789;</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel upload-panel">
+      <div class="input-tabs" role="tablist" aria-label="Input type">
+        <button type="button" class="tab-btn active" id="tabModelBtn" role="tab" aria-selected="true">3D Model</button>
+        <button type="button" class="tab-btn" id="tabImageBtn" role="tab" aria-selected="false">Image</button>
+      </div>
+
+      <div id="modelDropzone" class="dropzone" tabindex="0" role="button" aria-label="Upload 3D model files">
+        <p><strong>Drag &amp; drop</strong> a model (or a whole folder) here, or click to browse.</p>
+        <p class="hint">.glb / .gltf / .obj (+ .mtl + textures) / .fbx / .stl</p>
+        <p class="hint">
+          <button type="button" id="browseFolderBtn" class="link-button">
+            Model split across a folder (textures, .bin)? Select the folder instead
+          </button>
+        </p>
+        <input id="fileInput" type="file" multiple hidden />
+        <input id="folderInput" type="file" multiple webkitdirectory hidden />
+      </div>
+
+      <div id="imageDropzone" class="dropzone" tabindex="0" role="button" aria-label="Upload an image" hidden>
+        <p><strong>Drag &amp; drop</strong> an image here, or click to browse.</p>
+        <p class="hint">.png / .jpg / .webp</p>
+        <input id="imageInput" type="file" accept="image/*" hidden />
+      </div>
+
+      <div id="uploadStatus" class="status" role="status" aria-live="polite"></div>
+
+      <fieldset id="modelModeFieldset" class="mode-fieldset">
+        <legend>Output type</legend>
+        <label class="mode-option">
+          <input type="radio" name="modelMode" value="depth" checked />
+          <span>Depth map</span>
+        </label>
+        <label class="mode-option">
+          <input type="radio" name="modelMode" value="canny" />
+          <span>Canny edges</span>
+        </label>
+        <label class="mode-option">
+          <input type="radio" name="modelMode" value="pose" />
+          <span>Pose skeleton</span>
+        </label>
+      </fieldset>
+
+      <fieldset id="imageModeFieldset" class="mode-fieldset" hidden>
+        <legend>Output type</legend>
+        <label class="mode-option">
+          <input type="radio" name="imageMode" value="depth" checked />
+          <span>Depth map</span>
+        </label>
+        <label class="mode-option">
+          <input type="radio" name="imageMode" value="canny" />
+          <span>Canny edges</span>
+        </label>
+        <label class="mode-option">
+          <input type="radio" name="imageMode" value="pose" />
+          <span>Pose skeleton</span>
+        </label>
+      </fieldset>
+
+      <div id="resolutionField">
+        <label class="field-label" for="resolutionSelect">Output resolution</label>
+        <select id="resolutionSelect">
+          <option value="1024">1024 × 1024</option>
+          <option value="2048" selected>2048 × 2048</option>
+          <option value="4096">4096 × 4096</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="panel viewer-panel">
+      <div id="viewerContainer" class="viewer-container">
+        <canvas id="viewerCanvas"></canvas>
+        <img id="imagePreview" alt="Uploaded image" hidden />
+        <div id="viewerPlaceholder" class="viewer-placeholder">Nothing uploaded yet</div>
+      </div>
+      <div class="viewer-controls">
+        <button id="resetViewBtn" disabled>Reset view</button>
+        <button id="generateBtn" disabled>Generate depth map</button>
+      </div>
+    </section>
+
+    <section class="panel result-panel">
+      <div id="resultContainer" class="result-container">
+        <img id="resultImage" alt="Generated output" hidden />
+        <div id="resultPlaceholder" class="viewer-placeholder">Nothing generated yet</div>
+      </div>
+      <div id="resultNote" class="status" role="status" aria-live="polite"></div>
+      <div class="result-controls">
+        <a id="downloadBtn" class="button" download="output.png" hidden>Download PNG</a>
+      </div>
+    </section>
+  </main>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

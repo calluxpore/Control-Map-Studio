@@ -1,0 +1,350 @@
+:root {
+  --bg: #f5f4ed;
+  --panel: #ffffff;
+  --panel-border: #e8e4d9;
+  --text: #2b2a28;
+  --muted: #83807a;
+  --accent: #d97757;
+  --accent-hover: #c1663f;
+  --accent-text: #2b1b12;
+  --accent-soft: #f3e0d2;
+  --danger: #c0392b;
+  --viewer-bg: #edeae0;
+  --control-bg: #f0eee5;
+  --control-bg-hover: #e8e4d9;
+  --focus-ring: #c1663f;
+}
+
+:root[data-theme='dark'] {
+  --bg: #1f1e1d;
+  --panel: #262524;
+  --panel-border: #3a3835;
+  --text: #f5f4ed;
+  --muted: #a8a29b;
+  --accent: #e08659;
+  --accent-hover: #ef9c6e;
+  --accent-text: #2b1b12;
+  --accent-soft: #4a3527;
+  --danger: #e5766a;
+  --viewer-bg: #171615;
+  --control-bg: #2d2c2a;
+  --control-bg-hover: #383634;
+  --focus-ring: #e08659;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #1f1e1d;
+    --panel: #262524;
+    --panel-border: #3a3835;
+    --text: #f5f4ed;
+    --muted: #a8a29b;
+    --accent: #e08659;
+    --accent-hover: #ef9c6e;
+    --accent-text: #2b1b12;
+    --accent-soft: #4a3527;
+    --danger: #e5766a;
+    --viewer-bg: #171615;
+    --control-bg: #2d2c2a;
+    --control-bg-hover: #383634;
+    --focus-ring: #e08659;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+a,
+button,
+input,
+select,
+[tabindex] {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+header {
+  padding: 24px 32px 8px;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+header h1 {
+  margin: 0 0 4px;
+  font-size: 1.6rem;
+  color: var(--text);
+}
+
+.subtitle {
+  color: var(--muted);
+  margin: 0;
+}
+
+#themeToggle {
+  background: var(--control-bg);
+  color: var(--text);
+  border: 1px solid var(--panel-border);
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 1.1rem;
+}
+
+#themeToggle:hover {
+  background: var(--control-bg-hover);
+}
+
+main {
+  display: grid;
+  grid-template-columns: 320px 1fr 1fr;
+  gap: 16px;
+  padding: 16px 32px 32px;
+  align-items: start;
+}
+
+@media (max-width: 1000px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.input-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--control-bg);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 16px;
+}
+
+.tab-btn {
+  flex: 1;
+  background: transparent;
+  color: var(--muted);
+  border: none;
+  border-radius: 7px;
+  padding: 8px 10px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.tab-btn:hover {
+  background: var(--control-bg-hover);
+  color: var(--text);
+}
+
+.tab-btn.active {
+  background: var(--panel);
+  color: var(--accent);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.dropzone {
+  border: 2px dashed var(--panel-border);
+  border-radius: 10px;
+  padding: 24px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.dropzone:hover,
+.dropzone.dragover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.dropzone .hint {
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-top: 6px;
+}
+
+.status {
+  min-height: 1.2em;
+  font-size: 0.85rem;
+  margin-top: 8px;
+  color: var(--muted);
+}
+
+.status.error {
+  color: var(--danger);
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: var(--accent);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.78rem;
+  padding: 0;
+  font-weight: 400;
+}
+
+.link-button:hover {
+  color: var(--accent-hover);
+  background: none;
+}
+
+fieldset {
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  margin: 16px 0 0;
+  padding: 12px;
+}
+
+legend {
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0 4px;
+}
+
+.mode-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.mode-option:has(input:checked) {
+  background: var(--accent-soft);
+}
+
+.mode-option input {
+  accent-color: var(--accent);
+}
+
+.field-label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 16px 0 6px;
+}
+
+select {
+  width: 100%;
+  background: var(--control-bg);
+  color: var(--text);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+}
+
+.viewer-container,
+.result-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: var(--viewer-bg);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.viewer-container canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.viewer-container img,
+.result-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.viewer-placeholder {
+  position: absolute;
+  color: var(--muted);
+  font-size: 0.9rem;
+  pointer-events: none;
+  text-align: center;
+  padding: 0 16px;
+}
+
+.viewer-controls,
+.result-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+button,
+.button {
+  background: var(--accent);
+  color: var(--accent-text);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: background 0.15s;
+}
+
+button:hover:not(:disabled),
+.button:hover {
+  background: var(--accent-hover);
+}
+
+button:disabled {
+  background: var(--control-bg);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+#resetViewBtn:not(:disabled) {
+  background: var(--control-bg);
+  color: var(--text);
+  border: 1px solid var(--panel-border);
+}
+
+#resetViewBtn:hover:not(:disabled) {
+  background: var(--control-bg-hover);
+}
